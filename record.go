@@ -1,38 +1,13 @@
 package main
 
-type Point struct {
-}
+import "github.com/openGemini/openGemini/lib/record"
 
-// Field 字段类型
-type Field int
-
-const (
-	Field_Type_Unknown Field = iota
-	Field_Type_Int
-	Field_Type_UInt
-	Field_Type_Float
-	Field_Type_String
-	Field_Type_Boolean
-	Field_Type_Tag
-	Field_Type_Last
-)
-
-type ColVal struct {
-	Val          []byte
-	Offset       []uint32
-	Bitmap       []byte
-	BitMapOffset int
-	Len          int
-	NilCount     int
-}
-
-// Column 一个列所包涵的信息
 type Column struct {
-	schema Field    // 字段类型信息
-	values []ColVal // 字段值列表
+	schema record.Field
+	colVal record.ColVal
 }
 
-type Records struct {
+type Writer struct {
 	Measurement string
 	RowCount    int64
 	MinTime     int64
@@ -41,11 +16,17 @@ type Records struct {
 	Columns map[string]*Column
 }
 
-// Append 遍历point所有字段 将其值都追加进入Columns中
-func (r *Records) Append(point Point) {
-	// tag1 := r.Columns["tag1"].values
-	// tag1 = append(tag1, point.Tag1)
+// AppendLine 按行写入 遍历所有字段 将其值都追加进入Columns中
+func (r *Writer) AppendLine(tags map[string]string, fields map[string]interface{}) {
+
+}
+
+// AppendRows 按列写入 注意字段补齐
+func (r *Writer) AppendRows(cols map[string][]interface{}) {
+
 }
 
 // ToSrvRecords 转换成服务端所需的结构record.Record
-func (r *Records) ToSrvRecords() {}
+func (r *Writer) ToSrvRecords() *record.Record {
+	return nil
+}
