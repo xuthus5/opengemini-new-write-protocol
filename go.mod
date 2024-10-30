@@ -1,8 +1,6 @@
 module opengemini-new-write-protocol
 
-go 1.21
-
-toolchain go1.23.2
+go 1.22
 
 require (
 	github.com/openGemini/openGemini v1.2.0

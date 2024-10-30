@@ -2,10 +2,11 @@ package main
 
 import (
 	"errors"
-	"github.com/openGemini/openGemini/lib/record"
-	"github.com/openGemini/openGemini/lib/util/lifted/vm/protoparser/influx"
 	"sync"
 	"time"
+
+	"github.com/openGemini/openGemini/lib/record"
+	"github.com/openGemini/openGemini/lib/util/lifted/vm/protoparser/influx"
 )
 
 const TimeColumnName = "time"
@@ -18,16 +19,18 @@ type Column struct {
 }
 
 type Transform struct {
-	Measurement string
-	RowCount    int64
-	MinTime     int64
-	MaxTime     int64
-	mux         sync.RWMutex
-	Columns     map[string]*Column
+	Database        string
+	RetentionPolicy string
+	Measurement     string
+	RowCount        int64
+	MinTime         int64
+	MaxTime         int64
+	mux             sync.RWMutex
+	Columns         map[string]*Column
 }
 
-func NewTransform() *Transform {
-	return &Transform{Columns: make(map[string]*Column)}
+func NewTransform(database, rp, mst string) *Transform {
+	return &Transform{Database: database, RetentionPolicy: rp, Measurement: mst, Columns: make(map[string]*Column)}
 }
 
 // AppendLine write by row, traverse all fields and append their values to Columns
