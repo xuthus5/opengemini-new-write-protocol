@@ -19,11 +19,17 @@ func main() {
 	defer conn.Close()
 
 	mock := NewTransform("db0", "rp0", "mst0")
-	mock.AppendLine(map[string]string{"a": "1"}, map[string]interface{}{"b": 1}, int64(time.Now().Nanosecond()))
-	time.Sleep(time.Second)
-	mock.AppendLine(map[string]string{"a": "1"}, map[string]interface{}{"b": 2}, int64(time.Now().Nanosecond()))
+	if err := mock.AppendLine(map[string]string{"a": "1"}, map[string]interface{}{"b": 1}, time.Now().UnixNano()); err != nil {
+		panic(err)
+	}
+	if err := mock.AppendLine(map[string]string{"a": "1"}, map[string]interface{}{"b": 2}, time.Now().UnixNano()+100000); err != nil {
+		panic(err)
+	}
 
-	record := mock.ToSrvRecords()
+	record, err := mock.ToSrvRecords()
+	if err != nil {
+		panic(err)
+	}
 
 	var buff []byte
 	buff, err = record.Marshal(buff)
