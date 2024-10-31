@@ -19,10 +19,19 @@ func main() {
 	defer conn.Close()
 
 	mock := NewTransform("db0", "rp0", "mst0")
-	if err := mock.AppendLine(map[string]string{"a": "1"}, map[string]interface{}{"b": 1}, time.Now().UnixNano()); err != nil {
+	if err := mock.AppendLine(map[string]string{"t1": "1"}, map[string]interface{}{"v1": 1}, time.Now().UnixNano()); err != nil {
 		panic(err)
 	}
-	if err := mock.AppendLine(map[string]string{"a": "1"}, map[string]interface{}{"b": 2}, time.Now().UnixNano()+100000); err != nil {
+	if err := mock.AppendLine(map[string]string{"t1": "2"}, map[string]interface{}{"v1": 1, "v2": 2}, time.Now().UnixNano()+100000); err != nil {
+		panic(err)
+	}
+	if err := mock.AppendLine(map[string]string{"t2": "1", "t22": "1"}, map[string]interface{}{"d": 1}, time.Now().UnixNano()+100000); err != nil {
+		panic(err)
+	}
+	if err := mock.AppendLine(map[string]string{"t3": "2"}, map[string]interface{}{"ee": 2}, time.Now().UnixNano()+100000); err != nil {
+		panic(err)
+	}
+	if err := mock.AppendLine(map[string]string{"d4": "1"}, map[string]interface{}{"ee": 1}, time.Now().UnixNano()+100000); err != nil {
 		panic(err)
 	}
 

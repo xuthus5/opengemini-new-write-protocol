@@ -45,6 +45,7 @@ func NewTransform(database, rp, mst string) *Transform {
 		RetentionPolicy: rp,
 		Measurement:     mst,
 		Columns:         make(map[string]*Column),
+		fillChecker:     make(map[string]bool),
 	}
 }
 
@@ -133,24 +134,34 @@ func (t *Transform) appendFieldValue(column *Column, value interface{}) error {
 	switch v := value.(type) {
 	case string:
 		column.cv.AppendString(v)
+		return nil
 	case bool:
 		column.cv.AppendBoolean(v)
+		return nil
 	case float64:
 		column.cv.AppendFloat(v)
+		return nil
 	case float32:
 		column.cv.AppendFloat(float64(v))
+		return nil
 	case int:
 		column.cv.AppendInteger(int64(v))
+		return nil
 	case int64:
 		column.cv.AppendInteger(v)
+		return nil
 	case int32:
 		column.cv.AppendInteger(int64(v))
+		return nil
 	case uint:
 		column.cv.AppendInteger(int64(v))
+		return nil
 	case uint32:
 		column.cv.AppendInteger(int64(v))
+		return nil
 	case uint64:
 		column.cv.AppendInteger(int64(v))
+		return nil
 	}
 	// For unknown types, try to throw error
 	return ErrUnknownFieldType
