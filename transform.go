@@ -174,7 +174,7 @@ func (t *Transform) processTagColumns(tags map[string]string) (err error) {
 		}
 		tagColumn, ok := t.Columns[tagName]
 		if !ok {
-			tagColumn, err = t.createColumn(tagName, influx.Field_Type_String)
+			tagColumn, err = t.createColumn(tagName, influx.Field_Type_Tag)
 			if err != nil {
 				return err
 			}
@@ -250,7 +250,7 @@ func (t *Transform) processMissValueColumns() error {
 		if !ok {
 			continue
 		}
-		offset := column.cv.Len - t.RowCount
+		offset := t.RowCount - column.cv.Len
 		if offset == 0 {
 			continue
 		}
@@ -293,8 +293,8 @@ func (t *Transform) ToSrvRecords() (*record.Record, error) {
 
 	// Sort and validate the record
 	sort.Sort(rec)
-	rec = record.NewColumnSortHelper().Sort(rec)
 	record.CheckRecord(rec)
+	rec = record.NewColumnSortHelper().Sort(rec)
 
 	return rec, nil
 }
